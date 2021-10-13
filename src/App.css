@@ -18,15 +18,13 @@ amplify grey is forgot password and no account, light grey is border around text
   --amplify-light-grey: #837a7a;
   --amplify-white: #CCBCBC;
   --amplify-red: #57424f;
-  --container-height: 0;
   /* --amplify-font-family: 'Festive', cursive; */
 }
 
-/* amplify-authenticator {
-  background: tomato;
+amplify-authenticator {
   padding: 5px;
-
-} */
+  --container-height: 0;
+}
 
 body{
   background-color: #373640;
