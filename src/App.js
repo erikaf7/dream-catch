@@ -29,21 +29,33 @@ function App() {
     )
   }
   return (
+    <div>
+      <h1>Dream Catch</h1>
     <div style={{ display: 'flex', justifyContent: 'center' }}>
+ 
       <AmplifyAuthenticator>
         <AmplifySignUp
           slot="sign-up"
           formFields={[
-            { type: "username" },
+            { 
+              type: "username", 
+              label: "Username",
+              placeholder: "Choose a username..."
+            },
             {
               type: "password",
-              label: "Custom Password Label",
-              placeholder: "custom password placeholder"
+              label: "Password",
+              placeholder: "Choose a password..."
             },
-            { type: "email" }
+            { 
+              type: "email",
+              label: "Email Address",
+              placeholder: "Enter your email address..."
+            }
           ]} 
         />
       </AmplifyAuthenticator>
+    </div>
     </div>
   );
 }

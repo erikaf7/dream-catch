@@ -1,5 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Festive&display=swap');
+/* css for amplify auth, color is button and links, contrast is button text color, tint is hover for links, shade is on click for links. 
+
+for secondary, color is sign in header and text labels, contrast is text fields, tint is error window at top color, shade is ???, 
+
+amplify grey is forgot password and no account, light grey is border around text box, amplify white is box around sign in content
+*/
+
+:root {
+  --amplify-primary-color: #9e8194;
+  --amplify-primary-contrast: #3D3636;
+  --amplify-primary-tint: rgb(102, 36, 207);
+  --amplify-primary-shade: #a294b8;
+  --amplify-secondary-color: #3D3636;
+  --amplify-secondary-contrast: #F1E3E4;
+  --amplify-secondary-tint: #8a7e7f;
+  --amplify-grey: #705767;
+  --amplify-light-grey: #837a7a;
+  --amplify-white: #CCBCBC;
+  --amplify-red: #57424f;
+  --container-height: 0;
+  /* --amplify-font-family: 'Festive', cursive; */
+}
+
+/* amplify-authenticator {
+  background: tomato;
+  padding: 5px;
+
+} */
+
+body{
+  background-color: #373640;
+}
+
 .App {
   text-align: center;
+
+}
+
+h1 {
+  text-align: center;
+  color: #F1E3E4;
 }
 
 .App-logo {
