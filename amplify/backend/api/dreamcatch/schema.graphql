@@ -1,0 +1,9 @@
+type Dream @model {
+  id: ID!
+  name: String!
+  date: AWSDate
+  location: String
+  theme: String
+  description: String
+  interpertation: String
+}
