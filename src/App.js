@@ -1,10 +1,49 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
-import { AmplifyAuthenticator, AmplifySignUp, AmplifySignOut } from '@aws-amplify/ui-react'
-import { Auth, Hub } from 'aws-amplify';
+import { AmplifyAuthenticator, AmplifySignUp, AmplifySignOut } from '@aws-amplify/ui-react';
+import { listDreams } from './graphql/queries';
+import { createDream as createDreamMutation, deleteDream as deleteDreamMutation } from './graphql/mutations';
+import { Auth, Hub, API } from 'aws-amplify';
+
+const initialFormState = {  
+  name: '',
+  date: '',
+  location: '',
+  theme: '',
+  description: '',
+  interpertation: '',
+}
 
 function App() {
+  /* dream form/crud code */
+  const [dreams, setDreams] = useState([]);
+  const [formData, setFormData] = useState(initialFormState);
+
+  useEffect(() => {
+    fetchDreams();
+  }, []);
+
+  async function fetchDreams() {
+    const apiData = await API.graphql({ query: listDreams });
+    setDreams(apiData.data.listDreams.items);
+  }
+
+  async function createDream() {
+    if(!formData.name || !formData.description) return;
+    await API.graphql({ query: createDreamMutation, variables: { input: formData } });
+    setDreams([ ...dreams, formData ]);
+    setFormData(initialFormState);
+  }
+
+  async function deleteDream({ id }) {
+    const newDreamsArray = dreams.filter(dream => dream.id !== id);
+    setDreams(newDreamsArray);
+    await API.graphql({ query: deleteDreamMutation, variables: { input: id } });
+  }
+
+  /* user auth code*/
   const [user, updateUser] = React.useState(null);
+
   React.useEffect(() => {
     Auth.currentAuthenticatedUser()
       .then(user => updateUser(user))
@@ -21,13 +60,62 @@ function App() {
   }, [])
   if (user) {
     return (
+        /* logged in page*/
       <div>
         <h1>Dream Catch</h1>
-        <h1>Hello {user.username}</h1>
+        <h1>Hello, {user.username}.</h1>
+        <input 
+        onChange= { e => setFormData({ ...formData, 'name': e.target.value})}
+        placeholder="Name of your dream..."
+        value={formData.name}
+        />
+        <input 
+        type= 'date'
+        onChange= { e => setFormData({ ...formData, 'date': e.target.value})}
+        placeholder="Date your dream happened..."
+        value={formData.date}
+        />
+        <input 
+        onChange= { e => setFormData({ ...formData, 'location': e.target.value})}
+        placeholder="Where your dream took place..."
+        value={formData.location}
+        />
+        <input 
+        onChange= { e => setFormData({ ...formData, 'theme': e.target.value})}
+        placeholder="The theme of your dream..."
+        value={formData.theme}
+        />
+        <input 
+        onChange= { e => setFormData({ ...formData, 'description': e.target.value})}
+        placeholder="A description of your dream..."
+        value={formData.description}
+        />
+        <input 
+        onChange= { e => setFormData({ ...formData, 'interpertation': e.target.value})}
+        placeholder="An interpertation of the dream..."
+        value={formData.interpertation}
+        />
+        <button onClick = {createDream} >Save your dream</button>
+        <div>
+          {
+            dreams.map(dream => (
+              <div key= { dream.id || dream.name}>
+                <h2>{ dream.name }</h2>
+                <p>{ dream.date }</p>
+                <p>{ dream.location }</p>
+                <p>{ dream.theme }</p>
+                <p>{ dream.description }</p>
+                <p>{ dream.interpertation }</p>
+                <button onClick={ () => deleteDream(dream)}>Remove dream</button>
+              </div>
+            ))
+          }
+        </div>
         <AmplifySignOut />
       </div>
     )
   }
+
   return (
     <div>
       <h1>Dream Catch</h1>
