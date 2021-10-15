@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import { AmplifyAuthenticator, AmplifySignUp, AmplifySignOut } from '@aws-amplify/ui-react';
 import { listDreams } from './graphql/queries';
-import { createDream as createDreamMutation, deleteDream as deleteDreamMutation } from './graphql/mutations';
+import { createDream as createDreamMutation, updateDream as updateDreamMutation, deleteDream as deleteDreamMutation } from './graphql/mutations';
 import { Auth, Hub, API } from 'aws-amplify';
 
 const initialFormState = {  
@@ -34,7 +34,13 @@ function App() {
     setDreams([ ...dreams, formData ]);
     setFormData(initialFormState);
   }
-
+  async function updateDream({id}) {
+    const updateDream = dreams.filter(dream => dream.id == id);
+    updateDream = initialFormState
+    await API.graphql({ query: updateDreamMutation, variables: { input: updateDream} });
+    setDreams([ ...dreams, updateDream ]);
+    setFormData(initialFormState);
+  }
   async function deleteDream({ id }) {
     const newDreamsArray = dreams.filter(dream => dream.id !== id);
     setDreams(newDreamsArray);
@@ -63,7 +69,7 @@ function App() {
         /* logged in page*/
       <div>
         <h1>Dream Catch</h1>
-        <h1>Hello, {user.username}.</h1>
+        <p>Hello {user.username}, and welcome to Dream Catch!</p>
         <input 
         onChange= { e => setFormData({ ...formData, 'name': e.target.value})}
         placeholder="Name of your dream..."
@@ -101,12 +107,13 @@ function App() {
             dreams.map(dream => (
               <div key= { dream.id || dream.name}>
                 <h2>{ dream.name }</h2>
-                <p>{ dream.date }</p>
-                <p>{ dream.location }</p>
-                <p>{ dream.theme }</p>
-                <p>{ dream.description }</p>
-                <p>{ dream.interpertation }</p>
+                <p>Date: { dream.date }</p>
+                <p>Location: { dream.location }</p>
+                <p>Theme: { dream.theme }</p>
+                <p>Description: { dream.description }</p>
+                <p>Interpertation: { dream.interpertation }</p>
                 <button onClick={ () => deleteDream(dream)}>Remove dream</button>
+                <button onClick={ () => updateDream(dream)}>Update dream</button>
               </div>
             ))
           }
