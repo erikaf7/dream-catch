@@ -36,27 +36,28 @@ function App() {
   }
   async function updateDream({ id }) {
     const selectDream = dreams.filter(dream => dream.id === id);
-    console.log(dreams.id)
-    console.log(dreams)
     const updateDream = {  
       id: selectDream[0].id,
-      name: 'd',
+      name: 'update test',
       date: '2021-10-12',
-      location: 'b',
-      theme: 'b',
-      description: 'b',
-      interpertation: 'b',
+      location: 'here',
+      theme: 'testing',
+      description: 'testing updating a dream',
+      interpertation: 'it works?',
     }
     const newDreamsArray = dreams.filter(dream => dream.id !== id);
     await API.graphql({ query: updateDreamMutation, variables: { input: updateDream } });
     newDreamsArray.push(updateDream)
     setDreams(newDreamsArray);
-    console.log(dreams)
   }
   async function deleteDream({ id }) {
+    const selectDream = dreams.filter(dream => dream.id === id);
     const newDreamsArray = dreams.filter(dream => dream.id !== id);
+    const deleteDream = {
+      id: selectDream[0].id
+    }
     setDreams(newDreamsArray);
-    await API.graphql({ query: deleteDreamMutation, variables: { input: id } });
+    await API.graphql({ query: deleteDreamMutation, variables: { input: deleteDream} });
   }
 
   /* user auth code*/
