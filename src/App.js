@@ -34,12 +34,24 @@ function App() {
     setDreams([ ...dreams, formData ]);
     setFormData(initialFormState);
   }
-  async function updateDream({id}) {
-    const updateDream = dreams.filter(dream => dream.id == id);
-    updateDream = initialFormState
-    await API.graphql({ query: updateDreamMutation, variables: { input: updateDream} });
-    setDreams([ ...dreams, updateDream ]);
-    setFormData(initialFormState);
+  async function updateDream({ id }) {
+    const selectDream = dreams.filter(dream => dream.id === id);
+    console.log(dreams.id)
+    console.log(dreams)
+    const updateDream = {  
+      id: selectDream[0].id,
+      name: 'd',
+      date: '2021-10-12',
+      location: 'b',
+      theme: 'b',
+      description: 'b',
+      interpertation: 'b',
+    }
+    const newDreamsArray = dreams.filter(dream => dream.id !== id);
+    await API.graphql({ query: updateDreamMutation, variables: { input: updateDream } });
+    newDreamsArray.push(updateDream)
+    setDreams(newDreamsArray);
+    console.log(dreams)
   }
   async function deleteDream({ id }) {
     const newDreamsArray = dreams.filter(dream => dream.id !== id);
