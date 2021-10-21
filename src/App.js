@@ -4,8 +4,22 @@ import { AmplifyAuthenticator, AmplifySignUp, AmplifySignOut } from '@aws-amplif
 import { listDreams } from './graphql/queries';
 import { createDream as createDreamMutation, updateDream as updateDreamMutation, deleteDream as deleteDreamMutation } from './graphql/mutations';
 import { Auth, Hub, API } from 'aws-amplify';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import Modal from 'react-bootstrap/Modal'
+import ModalBody from "react-bootstrap/ModalBody";
+import ModalHeader from "react-bootstrap/ModalHeader";
+import ModalFooter from "react-bootstrap/ModalFooter";
+import ModalTitle from "react-bootstrap/ModalTitle";
 
 const initialFormState = {  
+  name: '',
+  date: '',
+  location: '',
+  theme: '',
+  description: '',
+  interpertation: '',
+}
+const initialUpdateState = {  
   name: '',
   date: '',
   location: '',
@@ -18,6 +32,7 @@ function App() {
   /* dream form/crud code */
   const [dreams, setDreams] = useState([]);
   const [formData, setFormData] = useState(initialFormState);
+  const [updateData, setupdateData] = useState(initialUpdateState);
 
   useEffect(() => {
     fetchDreams();
@@ -49,6 +64,7 @@ function App() {
     await API.graphql({ query: updateDreamMutation, variables: { input: updateDream } });
     newDreamsArray.push(updateDream)
     setDreams(newDreamsArray);
+    hideModal();
   }
   async function deleteDream({ id }) {
     const selectDream = dreams.filter(dream => dream.id === id);
@@ -59,6 +75,18 @@ function App() {
     setDreams(newDreamsArray);
     await API.graphql({ query: deleteDreamMutation, variables: { input: deleteDream} });
   }
+
+  /* modal code */
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  const showModal = () => {
+    setIsOpen(true);
+  };
+
+  const hideModal = () => {
+    setIsOpen(false);
+  };
+
 
   /* user auth code*/
   const [user, updateUser] = React.useState(null);
@@ -126,7 +154,37 @@ function App() {
                 <p>Description: { dream.description }</p>
                 <p>Interpertation: { dream.interpertation }</p>
                 <button onClick={ () => deleteDream(dream)}>Remove dream</button>
-                <button onClick={ () => updateDream(dream)}>Update dream</button>
+                <button onClick= {showModal}>Update dream</button>
+
+        <Modal show={isOpen} onHide={hideModal}>
+          <Modal.Header>
+            <Modal.Title>Update Dream</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+          <input onChange= { e => setFormData({ ...formData, 'name': e.target.value})} placeholder="Name of your dream..." value={formData.name}/>
+          <input type= 'date'onChange= { e => setFormData({ ...formData, 'date': e.target.value})} placeholder="Date your dream happened..." value={formData.date}/>
+          <input onChange= { e => setFormData({ ...formData, 'location': e.target.value})} placeholder="Where your dream took place..." value={formData.location}/>
+          <input onChange= { e => setFormData({ ...formData, 'theme': e.target.value})}
+        placeholder="The theme of your dream..."
+        value={formData.theme}
+        />
+        <input 
+        onChange= { e => setFormData({ ...formData, 'description': e.target.value})}
+        placeholder="A description of your dream..."
+        value={formData.description}
+        />
+        <input 
+        onChange= { e => setFormData({ ...formData, 'interpertation': e.target.value})}
+        placeholder="An interpertation of the dream..."
+        value={formData.interpertation}
+        />
+        </Modal.Body>
+        <Modal.Footer>
+          <button onClick={hideModal}>Cancel</button>
+          <button onClick={ () => updateDream(dream)}>Save</button>
+        </Modal.Footer>
+      </Modal>
+
               </div>
             ))
           }
