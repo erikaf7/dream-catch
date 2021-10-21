@@ -4,6 +4,6 @@ type Dream @model {
   date: AWSDate
   location: String
   theme: String
-  description: String
+  description: String!
   interpertation: String
 }
