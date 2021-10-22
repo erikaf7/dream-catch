@@ -6,4 +6,5 @@ type Dream @model {
   theme: String
   description: String!
   interpertation: String
+  user: String
 }

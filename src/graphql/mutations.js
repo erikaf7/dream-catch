@@ -14,6 +14,7 @@ export const createDream = /* GraphQL */ `
       theme
       description
       interpertation
+      user
       createdAt
       updatedAt
     }
@@ -32,6 +33,7 @@ export const updateDream = /* GraphQL */ `
       theme
       description
       interpertation
+      user
       createdAt
       updatedAt
     }
@@ -50,6 +52,7 @@ export const deleteDream = /* GraphQL */ `
       theme
       description
       interpertation
+      user
       createdAt
       updatedAt
     }

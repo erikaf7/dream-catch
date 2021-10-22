@@ -11,6 +11,7 @@ export const getDream = /* GraphQL */ `
       theme
       description
       interpertation
+      user
       createdAt
       updatedAt
     }
@@ -31,6 +32,7 @@ export const listDreams = /* GraphQL */ `
         theme
         description
         interpertation
+        user
         createdAt
         updatedAt
       }

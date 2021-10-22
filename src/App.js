@@ -6,10 +6,7 @@ import { createDream as createDreamMutation, updateDream as updateDreamMutation,
 import { Auth, Hub, API } from 'aws-amplify';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Modal from 'react-bootstrap/Modal'
-import ModalBody from "react-bootstrap/ModalBody";
-import ModalHeader from "react-bootstrap/ModalHeader";
-import ModalFooter from "react-bootstrap/ModalFooter";
-import ModalTitle from "react-bootstrap/ModalTitle";
+
 
 const initialFormState = {  
   name: '',
@@ -18,6 +15,7 @@ const initialFormState = {
   theme: '',
   description: '',
   interpertation: '',
+  user: '',
 }
 const initialUpdateState = {  
   name: '',
@@ -26,13 +24,14 @@ const initialUpdateState = {
   theme: '',
   description: '',
   interpertation: '',
+  user: '', 
 }
 
 function App() {
   /* dream form/crud code */
   const [dreams, setDreams] = useState([]);
   const [formData, setFormData] = useState(initialFormState);
-  const [updateData, setupdateData] = useState(initialUpdateState);
+  const [updateData, setUpdateData] = useState(initialUpdateState);
 
   useEffect(() => {
     fetchDreams();
@@ -45,25 +44,31 @@ function App() {
 
   async function createDream() {
     if(!formData.name || !formData.description) return;
+    formData.user = user.username;
+    console.log(formData.theme);
     await API.graphql({ query: createDreamMutation, variables: { input: formData } });
     setDreams([ ...dreams, formData ]);
+    console.log(formData);
     setFormData(initialFormState);
+
   }
   async function updateDream({ id }) {
     const selectDream = dreams.filter(dream => dream.id === id);
     const updateDream = {  
       id: selectDream[0].id,
-      name: 'update test',
-      date: '2021-10-12',
-      location: 'here',
-      theme: 'testing',
-      description: 'testing updating a dream',
-      interpertation: 'it works?',
+      name: updateData.name,
+      date: updateData.date,
+      location: updateData.location,
+      theme: updateData.theme,
+      description: updateData.description,
+      interpertation: updateData.interpertation,
+      user: user.username,
     }
     const newDreamsArray = dreams.filter(dream => dream.id !== id);
     await API.graphql({ query: updateDreamMutation, variables: { input: updateDream } });
     newDreamsArray.push(updateDream)
     setDreams(newDreamsArray);
+    setFormData(initialUpdateState);
     hideModal();
   }
   async function deleteDream({ id }) {
@@ -107,10 +112,13 @@ function App() {
   }, [])
   if (user) {
     return (
+
         /* logged in page*/
       <div>
         <h1>Dream Catch</h1>
-        <p>Hello {user.username}, and welcome to Dream Catch!</p>
+        <p onLoad= {e => setFormData({...formData, 'user': user.username})}
+        value={user.username}
+        >Hello {user.username}, and welcome to Dream Catch!</p>
         <input 
         onChange= { e => setFormData({ ...formData, 'name': e.target.value})}
         placeholder="Name of your dream..."
@@ -153,38 +161,27 @@ function App() {
                 <p>Theme: { dream.theme }</p>
                 <p>Description: { dream.description }</p>
                 <p>Interpertation: { dream.interpertation }</p>
-                <button onClick={ () => deleteDream(dream)}>Remove dream</button>
-                <button onClick= {showModal}>Update dream</button>
-
-        <Modal show={isOpen} onHide={hideModal}>
-          <Modal.Header>
-            <Modal.Title>Update Dream</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-          <input onChange= { e => setFormData({ ...formData, 'name': e.target.value})} placeholder="Name of your dream..." value={formData.name}/>
-          <input type= 'date'onChange= { e => setFormData({ ...formData, 'date': e.target.value})} placeholder="Date your dream happened..." value={formData.date}/>
-          <input onChange= { e => setFormData({ ...formData, 'location': e.target.value})} placeholder="Where your dream took place..." value={formData.location}/>
-          <input onChange= { e => setFormData({ ...formData, 'theme': e.target.value})}
-        placeholder="The theme of your dream..."
-        value={formData.theme}
-        />
-        <input 
-        onChange= { e => setFormData({ ...formData, 'description': e.target.value})}
-        placeholder="A description of your dream..."
-        value={formData.description}
-        />
-        <input 
-        onChange= { e => setFormData({ ...formData, 'interpertation': e.target.value})}
-        placeholder="An interpertation of the dream..."
-        value={formData.interpertation}
-        />
-        </Modal.Body>
-        <Modal.Footer>
-          <button onClick={hideModal}>Cancel</button>
-          <button onClick={ () => updateDream(dream)}>Save</button>
-        </Modal.Footer>
-      </Modal>
-
+                <p>User: { dream.user }</p>
+                { dream.user === user.username &&
+                <><button onClick={() => deleteDream(dream)}>Remove dream</button><button onClick={showModal}>Modify dream</button></>
+                }
+                <Modal show={isOpen} onHide={hideModal}>
+                  <Modal.Header>
+                    <Modal.Title>Update Dream</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <input onChange= { e => setUpdateData({ ...updateData, 'name': e.target.value})} placeholder={ dream.name }value={updateData.name}/>
+                    <input type= 'date' onChange= { e => setUpdateData({ ...updateData, 'date': e.target.value})} placeholder={ dream.date } value={updateData.date}/>
+                    <input onChange= { e => setUpdateData({ ...updateData, 'location': e.target.value})} placeholder={ dream.location } value={updateData.location}/>
+                    <input onChange= { e => setUpdateData({ ...updateData, 'theme': e.target.value})} placeholder={ dream.theme } value={updateData.theme}/>
+                    <input onChange= { e => setUpdateData({ ...updateData, 'description': e.target.value})} placeholder={ dream.description } value={updateData.description}/>
+                    <input onChange= { e => setUpdateData({ ...updateData, 'interpertation': e.target.value})} placeholder={ dream.interpertation } value={updateData.interpertation}/>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <button onClick={hideModal}>Cancel</button>
+                    <button onClick={ () => updateDream(dream)}>Update</button>
+                  </Modal.Footer>
+                </Modal>
               </div>
             ))
           }
@@ -197,7 +194,7 @@ function App() {
   return (
     <div>
       <h1>Dream Catch</h1>
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
  
       <AmplifyAuthenticator>
         <AmplifySignUp
