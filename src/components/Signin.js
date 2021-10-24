@@ -1,7 +1,7 @@
 import React from 'react'
+import { AmplifyAuthenticator, AmplifySignUp } from '@aws-amplify/ui-react';
 
-const Signin = ()=>{
-
+const Signin = () => {
 
     return( 
         <div>

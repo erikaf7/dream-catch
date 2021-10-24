@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
-import { AmplifyAuthenticator, AmplifySignUp, AmplifySignOut } from '@aws-amplify/ui-react';
+import { AmplifySignOut } from '@aws-amplify/ui-react';
 import { listDreams } from './graphql/queries';
 import { createDream as createDreamMutation, updateDream as updateDreamMutation, deleteDream as deleteDreamMutation } from './graphql/mutations';
 import { Auth, Hub, API } from 'aws-amplify';
 import Modal from 'react-bootstrap/Modal'
+import Signin from './components/Signin';
 
 const initialFormState = {  
   name: '',
@@ -190,34 +191,7 @@ function App() {
   }
 
   return (
-    <div>
-      <h1>Dream Catch</h1>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
- 
-      <AmplifyAuthenticator>
-        <AmplifySignUp
-          slot="sign-up"
-          formFields={[
-            { 
-              type: "username", 
-              label: "Username",
-              placeholder: "Choose a username..."
-            },
-            {
-              type: "password",
-              label: "Password",
-              placeholder: "Choose a password..."
-            },
-            { 
-              type: "email",
-              label: "Email Address",
-              placeholder: "Enter your email address..."
-            }
-          ]} 
-        />
-      </AmplifyAuthenticator>
-    </div>
-    </div>
+      <Signin />
   );
 }
 
