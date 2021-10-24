@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
 import { AmplifyAuthenticator, AmplifySignUp, AmplifySignOut } from '@aws-amplify/ui-react';
 import { listDreams } from './graphql/queries';
 import { createDream as createDreamMutation, updateDream as updateDreamMutation, deleteDream as deleteDreamMutation } from './graphql/mutations';
 import { Auth, Hub, API } from 'aws-amplify';
-import 'bootstrap/dist/css/bootstrap.min.css'
 import Modal from 'react-bootstrap/Modal'
-
 
 const initialFormState = {  
   name: '',
@@ -112,45 +111,46 @@ function App() {
   }, [])
   if (user) {
     return (
-
         /* logged in page*/
       <div>
         <h1>Dream Catch</h1>
         <p onLoad= {e => setFormData({...formData, 'user': user.username})}
         value={user.username}
-        >Hello {user.username}, and welcome to Dream Catch!</p>
-        <input 
-        onChange= { e => setFormData({ ...formData, 'name': e.target.value})}
-        placeholder="Name of your dream..."
-        value={formData.name}
-        />
-        <input 
-        type= 'date'
-        onChange= { e => setFormData({ ...formData, 'date': e.target.value})}
-        placeholder="Date your dream happened..."
-        value={formData.date}
-        />
-        <input 
-        onChange= { e => setFormData({ ...formData, 'location': e.target.value})}
-        placeholder="Where your dream took place..."
-        value={formData.location}
-        />
-        <input 
-        onChange= { e => setFormData({ ...formData, 'theme': e.target.value})}
-        placeholder="The theme of your dream..."
-        value={formData.theme}
-        />
-        <input 
-        onChange= { e => setFormData({ ...formData, 'description': e.target.value})}
-        placeholder="A description of your dream..."
-        value={formData.description}
-        />
-        <input 
-        onChange= { e => setFormData({ ...formData, 'interpertation': e.target.value})}
-        placeholder="An interpertation of the dream..."
-        value={formData.interpertation}
-        />
-        <button onClick = {createDream} >Save your dream</button>
+        >Hello {user.username}, and welcome to Dream Catch! Enter your dreams below, and view dreams created by others here.</p>
+        <div class="dream-form">
+          <input class="form a"
+          onChange= { e => setFormData({ ...formData, 'name': e.target.value})}
+          placeholder="Name of your dream..."
+          value={formData.name}
+          />
+          <input 
+          type= 'date' class="form b"
+          onChange= { e => setFormData({ ...formData, 'date': e.target.value})}
+          placeholder="Date your dream happened..."
+          value={formData.date}
+          />
+          <input class="form c"
+          onChange= { e => setFormData({ ...formData, 'location': e.target.value})}
+          placeholder="Where your dream took place..."
+          value={formData.location}
+          />
+          <input class="form d"
+          onChange= { e => setFormData({ ...formData, 'theme': e.target.value})}
+          placeholder="The theme of your dream..."
+          value={formData.theme}
+          />
+          <textarea class="form e" rows="4" cols="50"
+          onChange= { e => setFormData({ ...formData, 'description': e.target.value})}
+          placeholder="A description of your dream..."
+          value={formData.description}
+          />
+          <textarea class="form f" rows="4" cols="50"
+          onChange= { e => setFormData({ ...formData, 'interpertation': e.target.value})}
+          placeholder="An interpertation of the dream..."
+          value={formData.interpertation}
+          />
+          <button class="form g" onClick = {createDream} >Create your dream</button>
+        </div>
         <div>
           {
             dreams.map(dream => (
