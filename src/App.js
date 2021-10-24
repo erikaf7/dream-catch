@@ -114,47 +114,45 @@ function App() {
         /* logged in page*/
       <div>
         <h1>Dream Catch</h1>
-        <p onLoad= {e => setFormData({...formData, 'user': user.username})}
-        value={user.username}
-        >Hello {user.username}, and welcome to Dream Catch! Enter your dreams below, and view dreams created by others here.</p>
-        <div class="dream-form">
-          <input class="form a"
+        <p className="intro-text">Hello {user.username}, and welcome to Dream Catch! Enter your dreams below, and view dreams created by others here.</p>
+        <div className="dream-form">
+          <input className="form a"
           onChange= { e => setFormData({ ...formData, 'name': e.target.value})}
           placeholder="Name of your dream..."
           value={formData.name}
           />
           <input 
-          type= 'date' class="form b"
+          type= 'date' className="form b"
           onChange= { e => setFormData({ ...formData, 'date': e.target.value})}
-          placeholder="Date your dream happened..."
+          placeholder="Date of Dream..."
           value={formData.date}
           />
-          <input class="form c"
+          <input className="form c"
           onChange= { e => setFormData({ ...formData, 'location': e.target.value})}
-          placeholder="Where your dream took place..."
+          placeholder="Location of your dream..."
           value={formData.location}
           />
-          <input class="form d"
+          <input className="form d"
           onChange= { e => setFormData({ ...formData, 'theme': e.target.value})}
-          placeholder="The theme of your dream..."
+          placeholder="Theme of your dream..."
           value={formData.theme}
           />
-          <textarea class="form e" rows="4" cols="50"
+          <textarea className="form e" rows="4" cols="50"
           onChange= { e => setFormData({ ...formData, 'description': e.target.value})}
-          placeholder="A description of your dream..."
+          placeholder="Description of your dream..."
           value={formData.description}
           />
-          <textarea class="form f" rows="4" cols="50"
+          <textarea className="form f" rows="4" cols="50"
           onChange= { e => setFormData({ ...formData, 'interpertation': e.target.value})}
-          placeholder="An interpertation of the dream..."
+          placeholder="Interpertation of the dream..."
           value={formData.interpertation}
           />
-          <button class="form g" onClick = {createDream} >Create your dream</button>
+          <button className="form g" onClick = {createDream} >Create your dream</button>
         </div>
-        <div>
+        <div className="dreamlist">
           {
             dreams.map(dream => (
-              <div key= { dream.id || dream.name}>
+              <div className="dreamlist-item" key= { dream.id || dream.name}>
                 <h2>{ dream.name }</h2>
                 <p>Date: { dream.date }</p>
                 <p>Location: { dream.location }</p>
