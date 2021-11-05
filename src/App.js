@@ -14,7 +14,7 @@ const initialFormState = {
   location: '',
   theme: '',
   description: '',
-  interpertation: '',
+  interpretation: '',
   user: '',
 }
 const initialUpdateState = {  
@@ -23,7 +23,7 @@ const initialUpdateState = {
   location: '',
   theme: '',
   description: '',
-  interpertation: '',
+  interpretation: '',
   user: '', 
 }
 
@@ -61,7 +61,7 @@ function App() {
       location: updateData.location,
       theme: updateData.theme,
       description: updateData.description,
-      interpertation: updateData.interpertation,
+      interpretation: updateData.interpretation,
       user: user.username,
     }
     const newDreamsArray = dreams.filter(dream => dream.id !== id);
@@ -144,9 +144,9 @@ function App() {
           value={formData.description}
           />
           <textarea className="form f" rows="4" cols="50"
-          onChange= { e => setFormData({ ...formData, 'interpertation': e.target.value})}
-          placeholder="Interpertation of the dream..."
-          value={formData.interpertation}
+          onChange= { e => setFormData({ ...formData, 'interpretation': e.target.value})}
+          placeholder="Interpretation of the dream..."
+          value={formData.interpretation}
           />
           <button className="form g" onClick = {createDream} >Create your dream</button>
         </div>
@@ -159,7 +159,7 @@ function App() {
                 <p>Location: { dream.location }</p>
                 <p>Theme: { dream.theme }</p>
                 <p>Description: { dream.description }</p>
-                <p>Interpertation: { dream.interpertation }</p>
+                <p>Interpretation: { dream.interpretation }</p>
                 <p>User: { dream.user }</p>
                 { dream.user === user.username &&
                 <><button onClick={() => deleteDream(dream)}>Remove dream</button><button onClick={showModal}>Modify dream</button></>
@@ -174,7 +174,7 @@ function App() {
                     <input onChange= { e => setUpdateData({ ...updateData, 'location': e.target.value})} placeholder={ dream.location } value={updateData.location}/>
                     <input onChange= { e => setUpdateData({ ...updateData, 'theme': e.target.value})} placeholder={ dream.theme } value={updateData.theme}/>
                     <input onChange= { e => setUpdateData({ ...updateData, 'description': e.target.value})} placeholder={ dream.description } value={updateData.description}/>
-                    <input onChange= { e => setUpdateData({ ...updateData, 'interpertation': e.target.value})} placeholder={ dream.interpertation } value={updateData.interpertation}/>
+                    <input onChange= { e => setUpdateData({ ...updateData, 'interpretation': e.target.value})} placeholder={ dream.interpretation } value={updateData.interpretation}/>
                   </Modal.Body>
                   <Modal.Footer>
                     <button onClick={hideModal}>Cancel</button>
